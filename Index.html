@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payal Gosai — Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════
+       COLOUR PALETTE — Blue · Black · Green · Pink · White
+    ═══════════════════════════════════════════════════════ */
+    :root {
+      --accent-dark: #e0f4ff;
+      /* light blue — name text, borders      */
+      --accent-mid: #00d4ff;
+      /* cyan blue — roles, sub-labels         */
+      --accent-bright: #ff4d8d;
+      /* hot pink — hover, links               */
+      --accent-light: #00ff88;
+      /* neon green — skill bars, glow         */
+      --bg-dark: #050d15;
+      /* deep navy — base background           */
+      --bg-card: rgba(10, 25, 45, .75);
+      /* dark card background                  */
+      --text-body: #a8d8f0;
+      /* soft light blue — paragraphs          */
+      --text-heading: #ffffff;
+      /* white — section headings              */
+      --window-border: rgba(0, 212, 255, .28);
+      /* cyan window border                   */
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #050d15;
+    }
+
+    #three-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* ── Intro Text ── */
+    #intro-text {
+      position: fixed;
+      top: 40px;
+      left: 48px;
+      z-index: 110;
+      color: #e0f4ff;
+      font-family: 'DM Sans', sans-serif;
+      pointer-events: none;
+      transition: opacity .6s ease;
+    }
+
+    #intro-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -1px;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(0, 212, 255, .4), 0 2px 20px rgba(0, 0, 0, .6);
+      color: #e0f4ff;
+    }
+
+    #intro-text .roles {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #intro-text .roles span {
+      font-size: .95rem;
+      font-weight: 500;
+      opacity: .88;
+      color: #00d4ff;
+    }
+
+    #intro-text .roles span::before {
+      content: "• ";
+      color: #00ff88;
+    }
+
+    #intro-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid rgba(0, 212, 255, 0.5);
+      color: #00d4ff;
+      padding: 9px 24px;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      pointer-events: auto;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 212, 255, .12);
+    }
+
+    /* ── Click hint ── */
+    #click-hint {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      color: rgba(0, 212, 255, .75);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .85rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: bob 2s ease-in-out infinite;
+      transition: opacity .5s;
+    }
+
+    #click-hint svg {
+      opacity: .7;
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0)
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(-6px)
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       DESKTOP OVERLAY — dark cyber wallpaper
+    ═══════════════════════════════════════════════════════ */
+    #desktop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      background: linear-gradient(135deg,
+          #050d15 0%,
+          #081a2e 30%,
+          #061a10 65%,
+          #0d0514 100%);
+      font-family: 'DM Sans', sans-serif;
+      animation: desktopIn .45s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    @keyframes desktopIn {
+      from {
+        opacity: 0;
+        transform: scale(.94)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    /* Scanline noise texture */
+    #desktop::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+      opacity: .35;
+    }
+
+    /* Subtle grid overlay for cyber feel */
+    #desktop::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(0, 212, 255, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, .03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ── Menubar ── */
+    #menubar {
+      position: relative;
+      z-index: 2;
+      height: 28px;
+      background: rgba(5, 13, 21, .85);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-size: .78rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0, 212, 255, .2);
+      gap: 20px;
+      color: #a8d8f0;
+    }
+
+    #menubar .apple {
+      font-size: 1rem;
+      margin-right: 4px;
+    }
+
+    #menubar .time-display {
+      margin-left: auto;
+      color: #00d4ff;
+    }
+
+    /* ── Desktop Icons ── */
+    #desktop-icons {
+      position: absolute;
+      top: 48px;
+      right: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    .desk-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      width: 76px;
+      transition: transform .15s;
+    }
+
+    .desk-icon:hover {
+      transform: scale(1.07);
+    }
+
+    .desk-icon:hover .icon-label {
+      background: rgba(0, 212, 255, 0.25);
+    }
+
+    .icon-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .4), 0 0 12px rgba(0, 212, 255, .15);
+      border: 1px solid rgba(0, 212, 255, .15);
+    }
+
+    .icon-label {
+      font-size: .7rem;
+      font-weight: 500;
+      text-align: center;
+      color: #e0f4ff;
+      background: rgba(0, 20, 40, .6);
+      padding: 1px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      text-shadow: 0 0 8px rgba(0, 212, 255, .5);
+    }
+
+    /* ── Dock ── */
+    #dock {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      background: rgba(5, 13, 21, .7);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(0, 212, 255, .2);
+      border-radius: 20px;
+      padding: 8px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      box-shadow: 0 0 30px rgba(0, 212, 255, .08), inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    .dock-item {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform .18s, box-shadow .18s;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .3);
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .dock-item:hover {
+      transform: translateY(-6px) scale(1.15);
+      box-shadow: 0 8px 24px rgba(0, 212, 255, .25);
+    }
+
+    .dock-item .dock-tip {
+      position: absolute;
+      bottom: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(5, 13, 21, .9);
+      color: #00d4ff;
+      border: 1px solid rgba(0, 212, 255, .3);
+      font-size: .68rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+    }
+
+    .dock-item:hover .dock-tip {
+      opacity: 1;
+    }
+
+    /* ── Back button ── */
+    #back-btn {
+      display: none !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       WINDOW SYSTEM
+    ═══════════════════════════════════════════════════════ */
+    .window {
+      position: absolute;
+      z-index: 20;
+      background: rgba(8, 18, 32, .88);
+      backdrop-filter: blur(30px);
+      border: 1px solid var(--window-border);
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .5), 0 0 0 1px rgba(0, 212, 255, .1), 0 0 40px rgba(0, 212, 255, .06);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 340px;
+      top: 60px;
+      left: 120px;
+      animation: winIn .3s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    @keyframes winIn {
+      from {
+        opacity: 0;
+        transform: scale(.88)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .window.open {
+      display: flex;
+    }
+
+    /* Titlebar */
+    .win-titlebar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 7px;
+      background: linear-gradient(90deg, rgba(0, 30, 60, .9), rgba(0, 40, 30, .9));
+      border-bottom: 1px solid rgba(0, 212, 255, .2);
+      cursor: grab;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .win-titlebar:active {
+      cursor: grabbing;
+    }
+
+    .traffic {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .t-close {
+      background: #ff5f57;
+    }
+
+    .t-min {
+      background: #febc2e;
+    }
+
+    .t-max {
+      background: #28c840;
+    }
+
+    .win-title {
+      margin-left: 8px;
+      font-size: .82rem;
+      font-weight: 600;
+      color: #00d4ff;
+      flex: 1;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 212, 255, .4);
+    }
+
+    /* Window body */
+    .win-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px;
+    }
+
+    .win-body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .win-body::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, .2);
+      border-radius: 4px;
+    }
+
+    /* Content styles */
+    .win-section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: #ffffff;
+      margin-bottom: 12px;
+      border-bottom: 2px solid rgba(0, 212, 255, .2);
+      padding-bottom: 6px;
+      text-shadow: 0 0 15px rgba(0, 212, 255, .3);
+    }
+
+    .win-para {
+      font-size: .87rem;
+      line-height: 1.7;
+      color: var(--text-body);
+      margin-bottom: 14px;
+    }
+
+    .win-para strong {
+      color: #00ff88;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      background: linear-gradient(135deg, rgba(0, 212, 255, .12), rgba(0, 255, 136, .1));
+      color: #a8d8f0;
+      font-size: .72rem;
+      font-weight: 600;
+      padding: 3px 11px;
+      border-radius: 50px;
+      border: 1px solid rgba(0, 212, 255, .25);
+    }
+
+    .project-card {
+      background: linear-gradient(135deg, rgba(0, 30, 60, .5), rgba(0, 40, 30, .4));
+      border: 1px solid rgba(0, 212, 255, .2);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(0, 255, 136, .35);
+      box-shadow: 0 0 20px rgba(0, 255, 136, .06);
+    }
+
+    .project-card h3 {
+      font-size: .9rem;
+      font-weight: 600;
+      color: #00d4ff;
+      margin-bottom: 4px;
+    }
+
+    .project-card p {
+      font-size: .8rem;
+      color: #a8d8f0;
+      line-height: 1.6;
+    }
+
+    .project-card p strong {
+      color: #00ff88;
+    }
+
+    .project-card .proj-links {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .proj-link {
+      font-size: .73rem;
+      font-weight: 600;
+      color: #ff4d8d;
+      text-decoration: none;
+      padding: 2px 10px;
+      border: 1px solid rgba(255, 77, 141, .35);
+      border-radius: 50px;
+      transition: background .15s, box-shadow .15s;
+    }
+
+    .proj-link:hover {
+      background: rgba(255, 77, 141, .12);
+      box-shadow: 0 0 10px rgba(255, 77, 141, .2);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0, 30, 50, .6);
+      border: 1px solid rgba(0, 212, 255, .25);
+      color: #a8d8f0;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin: 4px 3px;
+    }
+
+    .win-link-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(0, 30, 60, .35);
+      border: 1px solid rgba(0, 212, 255, .1);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: #a8d8f0;
+      transition: background .15s, border-color .15s;
+      font-size: .85rem;
+      font-weight: 500;
+    }
+
+    .win-link-row:hover {
+      background: rgba(0, 212, 255, .1);
+      border-color: rgba(0, 212, 255, .35);
+    }
+
+    .win-link-row span.licon {
+      font-size: 1.2rem;
+    }
+
+    /* Skill bars */
+    .skill-row {
+      margin-bottom: 12px;
+    }
+
+    .skill-row label {
+      font-size: .8rem;
+      font-weight: 600;
+      color: #00d4ff;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .skill-bar {
+      height: 7px;
+      background: rgba(0, 212, 255, .1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #00ff88, #00d4ff, #ff4d8d);
+      animation: fillIn .8s ease forwards;
+    }
+
+    @keyframes fillIn {
+      from {
+        width: 0
+      }
+    }
+
+    /* ── Mouse Grid Effect ── */
+    #grid-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    #grid-canvas.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="three-canvas"></canvas>
+
+  <div id="intro-text">
+    <h1></h1>
+    <div class="">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div id="click-hint">
+    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path
+        d="M5.121 17.804A13.937 13.937 0 0 1 12 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+    </svg>
+    Click the monitor to open desktop
+  </div>
+
+
+  <!-- ══════════ DESKTOP OVERLAY ══════════ -->
+  <div id="desktop">
+
+    <!-- Mouse grid highlight canvas -->
+    <canvas id="grid-canvas"></canvas>
+
+    <div id="menubar">
+      <span class="apple">🌸</span>
+      <span>Payal Gosai's Portfolio</span>
+    </div>
+
+    <button id="back-btn" onclick="closeDesktop()">← Back to Desk</button>
+
+    <!-- ── Desktop Icons ── -->
+    <div id="desktop-icons">
+      <div class="desk-icon" onclick="openWindow('about-win')">
+        <div class="icon-img" style="background:linear-gradient(135deg,#001a33,#ff4d8d);">🌸</div>
+        <span class="icon-label">About Me</span>
+      </div>
+      <div class="desk-icon" onclick="openWindow('projects-win')">
+        <div class="icon-img" style="background:linear-gradient(135deg,#001a33,#7c3aed);">💡</div>
+        <span class="icon-label">Projects</span>
+      </div>
+      <div class="desk-icon" onclick="openWindow('skills-win')">
+        <div class="icon-img" style="background:linear-gradient(135deg,#001a33,#00ff88);">⚡</div>
+        <span class="icon-label">Skills</span>
+      </div>
+      <div class="desk-icon" onclick="openWindow('research-win')">
+        <div class="icon-img" style="background:linear-gradient(135deg,#001a33,#00d4ff);">📄</div>
+        <span class="icon-label">Research</span>
+      </div>
+      <div class="desk-icon" onclick="openWindow('contact-win')">
+        <div class="icon-img" style="background:linear-gradient(135deg,#001a33,#ff4d8d);">📬</div>
+        <span class="icon-label">Contact</span>
+      </div>
+    </div>
+
+    <!-- ── Dock ── -->
+    <div id="dock">
+      <div class="dock-item" style="background:#111d2e;"
+        onclick="window.open('https://github.com/payalgosai06')">
+        🐙<span class="dock-tip">GitHub</span>
+      </div>
+      <div class="dock-item" style="background:#003b6f;"
+        onclick="window.open('https://www.linkedin.com/in/payal-gosai-73258a3b5/')">
+        💼<span class="dock-tip">LinkedIn</span>
+      </div>
+      <div class="dock-item" style="background:#2a0020;" onclick="openWindow('about-win')">
+        🌸<span class="dock-tip">About</span>
+      </div>
+      <div class="dock-item" style="background:#1a0a3a;" onclick="openWindow('projects-win')">
+        💡<span class="dock-tip">Projects</span>
+      </div>
+      <div class="dock-item" style="background:#1a2a00;" onclick="openWindow('research-win')">
+        📄<span class="dock-tip">Research</span>
+      </div>
+      <div class="dock-item" style="background:#001a20;" onclick="openWindow('skills-win')">
+        ⚡<span class="dock-tip">Skills</span>
+      </div>
+      <div class="dock-item" style="background:#2a0020;" onclick="openWindow('contact-win')">
+        📬<span class="dock-tip">Contact</span>
+      </div>
+    </div>
+
+
+    <!-- ════════════ WINDOW: ABOUT ME ════════════ -->
+    <div class="window" id="about-win" style="width:460px;">
+      <div class="win-titlebar" id="about-win-bar">
+        <div class="traffic t-close" onclick="closeWindow('about-win')"></div>
+        <div class="traffic t-min" onclick="minimizeWindow('about-win')"></div>
+        <div class="traffic t-max"></div>
+        <span class="win-title">About Me</span>
+      </div>
+      <div class="win-body">
+        <div style="text-align:center; margin-bottom:18px;">
+          <div
+            style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#001a33,#00ff88);display:inline-flex;align-items:center;justify-content:center;font-size:2.4rem;box-shadow:0 4px 24px rgba(0,255,136,.25), 0 0 0 2px rgba(0,212,255,.2);">
+            🌸
+          </div>
+          <h2
+            style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:#ffffff;margin-top:10px;text-shadow:0 0 20px rgba(0,212,255,.4);">
+            Payal Gosai
+          </h2>
+          <p style="font-size:.78rem;color:#00d4ff;font-weight:500;">
+            IEEE Young Researcher · Web Developer · Designer · Business Analyst
+          </p>
+        </div>
+
+        <p class="win-para">
+          B.Tech student in Artificial Intelligence &amp; Machine Learning (2025–2029) at
+          NIMS University, Jaipur. Presenting author of <strong>2 IEEE research papers</strong>
+          and a national-level innovator with hands-on experience leading AI-healthcare projects.
+        </p>
+        <p class="win-para">
+          Active <strong>NCC Cadet</strong> with a long-term vision in cybersecurity, defense AI,
+          and smart automation. Driven by idea-to-system thinking and strong pitching capability.
+        </p>
+
+        <div class="win-section-title">Education</div>
+        <div class="project-card">
+          <h3>🎓 NIMS University, Jaipur</h3>
+          <p>
+            B.Tech — Artificial Intelligence &amp; Machine Learning<br />
+            Marik Institute of Computing, AI, Robotics &amp; Cybernetics<br />
+            <span style="color:#00ff88;font-weight:600;">2025 – 2029</span>
+          </p>
+        </div>
+
+        <div class="win-section-title">Badges</div>
+        <div>
+          <span class="badge">🏅 IEEE Student Member</span>
+          <span class="badge">🪖 NCC Cadet</span>
+          <span class="badge">🔬 IEEE Researcher</span>
+          <span class="badge">📍 Jaipur, Rajasthan</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════ WINDOW: PROJECTS ════════════ -->
+    <div class="window" id="projects-win" style="width:500px; left:160px; top:70px;">
+      <div class="win-titlebar" id="projects-win-bar">
+        <div class="traffic t-close" onclick="closeWindow('projects-win')"></div>
+        <div class="traffic t-min" onclick="minimizeWindow('projects-win')"></div>
+        <div class="traffic t-max"></div>
+        <span class="win-title">Projects &amp; Achievements</span>
+      </div>
+      <div class="win-body">
+        <div class="project-card">
+          <h3>💊 AUSHADHI Vault</h3>
+          <p>AI-powered smart medicine dispensing system targeting rural &amp; semi-urban healthcare access. End-to-end
+            system with AI prescription validation, teleconsultation, pharmacist verification, and automated dispensing.
+          </p>
+          <p style="margin-top:6px;font-size:.75rem;color:#00ff88;font-weight:600;">Role: Project Lead + System
+            Integration + Backend Planning</p>
+          <div class="proj-links">
+            <a class="proj-link" href="https://github.com/shahrukh051/aushadhi_vault" target="_blank">GitHub</a>
+            <a class="proj-link" href="#" target="_blank">Demo</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>🏆 BIRAC EYuva 2026 — National Final</h3>
+          <p>Co-developed AUSHADHI Vault for BIRAC EYuva 2026. Cleared rigorous multi-stage national screening to reach
+            the <strong>final evaluation round</strong>, competing with top student innovators across India.</p>
+          <div class="proj-links">
+            <a class="proj-link" href="https://birac.nic.in" target="_blank">BIRAC</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>🥇 Smart India Hackathon — 3rd &amp; 15th Rank</h3>
+          <p>Cleared the internal SIH selection round with <strong>3rd and 15th rank</strong> across separate problem
+            statements. Demonstrated rapid prototyping and team leadership.</p>
+        </div>
+        <div class="project-card">
+          <h3>🦈 IEEE Shark Tank — College Finalist</h3>
+          <p>Selected as finalist in the IEEE Shark Tank competition, pitching an innovative tech solution before a
+            panel of evaluators. Showcased strong communication and technical reasoning in a high-pressure startup-style
+            environment.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════ WINDOW: RESEARCH ════════════ -->
+    <div class="window" id="research-win" style="width:460px; left:200px; top:80px;">
+      <div class="win-titlebar" id="research-win-bar">
+        <div class="traffic t-close" onclick="closeWindow('research-win')"></div>
+        <div class="traffic t-min" onclick="minimizeWindow('research-win')"></div>
+        <div class="traffic t-max"></div>
+        <span class="win-title">Research &amp; Publications</span>
+      </div>
+      <div class="win-body">
+        <div class="win-section-title">IEEE Research Papers</div>
+        <p class="win-para">
+          Authored and presented <strong>2 research papers</strong> at IEEE-affiliated events —
+          one of the earliest researchers in the 1st year of B.Tech at NIMS University.
+          Covered domains at the intersection of AI, healthcare, and smart systems.
+        </p>
+        <div class="project-card">
+          <h3>📄 Paper 1 — IEEE</h3>
+          <p style="font-style:italic;color:#00d4ff;">Title: [Add paper title here]</p>
+          <p>Conference: [ICECRF Conference at vikrant university] · Year: 2025</p>
+          <div class="proj-links">
+            <a class="proj-link" href="#" target="_blank">DOI / IEEE Xplore</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>📄 Paper 2 — IEEE</h3>
+          <p style="font-style:italic;color:#00d4ff;">Title: [Add paper title here]</p>
+          <p>Conference: [ICECRF Conference at vikrant university] · Year: 2025</p>
+          <div class="proj-links">
+            <a class="proj-link" href="#" target="_blank">DOI / IEEE Xplore</a>
+          </div>
+        </div>
+        <div class="win-section-title">Events</div>
+        <div class="tag-row">
+          <span class="tag">🔬 National Science Day Summit — MNIT Jaipur</span>
+          <span class="tag">🏆 IEEE Shark Tank Finalist</span>
+          <span class="tag">💡 Hackathon Regular</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════ WINDOW: SKILLS ════════════ -->
+    <div class="window" id="skills-win" style="width:420px; left:140px; top:65px;">
+      <div class="win-titlebar" id="skills-win-bar">
+        <div class="traffic t-close" onclick="closeWindow('skills-win')"></div>
+        <div class="traffic t-min" onclick="minimizeWindow('skills-win')"></div>
+        <div class="traffic t-max"></div>
+        <span class="win-title">Skills &amp; Competencies</span>
+      </div>
+      <div class="win-body">
+        <div class="win-section-title">Technical Skills</div>
+        <div class="skill-row">
+          <label>AI &amp; Machine Learning</label>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width:85%"></div>
+          </div>
+        </div>
+        <div class="skill-row">
+          <label>Healthcare Tech (MedTech)</label>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width:80%"></div>
+          </div>
+        </div>
+        <div class="skill-row">
+          <label>System Architecture &amp; Design</label>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width:75%"></div>
+          </div>
+        </div>
+        <div class="skill-row">
+          <label>Web Development</label>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width:70%"></div>
+          </div>
+        </div>
+        <div class="skill-row">
+          <label>Research &amp; IEEE Publishing</label>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width:90%"></div>
+          </div>
+        </div>
+        <div class="skill-row">
+          <label>Innovation &amp; Startup Dev</label>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width:78%"></div>
+          </div>
+        </div>
+        <div class="win-section-title" style="margin-top:16px;">Soft Skills</div>
+        <div class="tag-row">
+          <span class="tag">Project Lead &amp; Coordination</span>
+          <span class="tag">Presentation &amp; Pitching</span>
+          <span class="tag">Idea-to-System Thinking</span>
+          <span class="tag">Team Leadership</span>
+          <span class="tag">Rapid Prototyping</span>
+          <span class="tag">Communication</span>
+        </div>
+        <div class="win-section-title" style="margin-top:16px;">Interests</div>
+        <div class="tag-row">
+          <span class="tag">🔒 Cybersecurity Research</span>
+          <span class="tag">🛡️ Defense AI</span>
+          <span class="tag">🏥 AI in Healthcare</span>
+          <span class="tag">📚 Technical Literature</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════ WINDOW: CONTACT ════════════ -->
+    <div class="window" id="contact-win" style="width:400px; left:180px; top:75px;">
+      <div class="win-titlebar" id="contact-win-bar">
+        <div class="traffic t-close" onclick="closeWindow('contact-win')"></div>
+        <div class="traffic t-min" onclick="minimizeWindow('contact-win')"></div>
+        <div class="traffic t-max"></div>
+        <span class="win-title">Contact &amp; Links</span>
+      </div>
+      <div class="win-body">
+        <p class="win-para">
+          Feel free to reach out — always happy to collaborate on research, AI/ML projects, or innovative ideas! 🌸
+        </p>
+        <a class="win-link-row" href="https://www.linkedin.com/in/payal-gosai-73258a3b5/" target="_blank">
+          <span class="licon">💼</span>
+          <div>
+            <div style="font-weight:600;color:#e0f4ff;">LinkedIn</div>
+            <div style="font-size:.75rem;color:#00d4ff;">linkedin.com/in/payal-gosai</div>
+          </div>
+          <span style="margin-left:auto;font-size:.75rem;color:#ff4d8d;">↗</span>
+        </a>
+        <a class="win-link-row" href="https://github.com/payalgosai06" target="_blank">
+          <span class="licon">🐙</span>
+          <div>
+            <div style="font-weight:600;color:#e0f4ff;">GitHub</div>
+            <div style="font-size:.75rem;color:#00d4ff;">github.com</div>
+          </div>
+          <span style="margin-left:auto;font-size:.75rem;color:#ff4d8d;">↗</span>
+        </a>
+        <a class="win-link-row" href="mailto:pgosai575@email.com">
+          <span class="licon">📧</span>
+          <div>
+            <div style="font-weight:600;color:#e0f4ff;">Email</div>
+            <div style="font-size:.75rem;color:#00d4ff;">pgosai575@email.com</div>
+          </div>
+          <span style="margin-left:auto;font-size:.75rem;color:#ff4d8d;">↗</span>
+        </a>
+        <a class="win-link-row" href="#">
+          <span class="licon">📍</span>
+          <div>
+            <div style="font-weight:600;color:#e0f4ff;">Location</div>
+            <div style="font-size:.75rem;color:#00d4ff;">Jaipur, Rajasthan, India</div>
+          </div>
+        </a>
+        <div class="tag-row" style="margin-top:12px;">
+          <span class="tag">🪖 NCC Cadet</span>
+          <span class="tag">🎓 NIMS University</span>
+          <span class="tag">📍 Jaipur</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#desktop -->
+
+
+  <!-- ══════════ THREE.JS SCENE ══════════ -->
+  <script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+ 
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const canvas = document.getElementById('three-canvas');
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0;
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a1520);  /* deep navy */
+    scene.fog = new THREE.Fog(0x0a1520, 10, 28);
+
+    const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
+    camera.position.set(0, 3.5, 8);
+    camera.lookAt(0, 0.8, 0);
+
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.07;
+    controls.minDistance = 3;
+    controls.maxDistance = 12;
+    controls.maxPolarAngle = Math.PI / 2.1;
+    controls.target.set(0, 0.8, 0);
+
+    /* ── Lights ── */
+    const ambient = new THREE.AmbientLight(0x112233, 1.4);
+    scene.add(ambient);
+
+    const sun = new THREE.DirectionalLight(0xaad4ff, 2.2);
+    sun.position.set(5, 9, 6);
+    sun.castShadow = true;
+    sun.shadow.mapSize.setScalar(2048);
+    sun.shadow.camera.near = 0.5; sun.shadow.camera.far = 30;
+    sun.shadow.camera.left = -8; sun.shadow.camera.right = 8;
+    sun.shadow.camera.top = 8; sun.shadow.camera.bottom = -8;
+    scene.add(sun);
+
+    const fill = new THREE.DirectionalLight(0x00ff88, 0.5);
+    fill.position.set(-6, 5, 2);
+    scene.add(fill);
+
+    /* Cyan screen glow */
+    const screenLight = new THREE.PointLight(0x00d4ff, 2.0, 4);
+    screenLight.position.set(0, 1.9, 0.2);
+    scene.add(screenLight);
+
+    /* Pink accent point light */
+    const pinkLight = new THREE.PointLight(0xff4d8d, 0.8, 5);
+    pinkLight.position.set(-2, 2.5, 1);
+    scene.add(pinkLight);
+
+    /* ── Materials ── */
+    const deskMat = new THREE.MeshStandardMaterial({ color: 0x1a2535, roughness: .3, metalness: .1 });
+    const legMat = new THREE.MeshStandardMaterial({ color: 0x0f1a2a, roughness: .5 });
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0x0a1020, roughness: .9 });
+    const wallMat = new THREE.MeshStandardMaterial({ color: 0x0d1825, roughness: 1 });
+    const monitorFrameMat = new THREE.MeshStandardMaterial({ color: 0x0a2040, roughness: .25, metalness: .3 });
+    const screenMat = new THREE.MeshStandardMaterial({
+      color: 0x001a33,
+      emissive: 0x00aaff,
+      emissiveIntensity: .7,
+      roughness: .05
+    });
+    const keyMat = new THREE.MeshStandardMaterial({ color: 0x0f1a2a, roughness: .45, metalness: .1 });
+    const mouseMat = new THREE.MeshStandardMaterial({ color: 0x0a2030, roughness: .4, metalness: .15 });
+    const plantPotMat = new THREE.MeshStandardMaterial({ color: 0x2a1a3a, roughness: .8 });
+    const plantLeafMat = new THREE.MeshStandardMaterial({ color: 0x00cc66, roughness: .7 });
+    const notebookMat = new THREE.MeshStandardMaterial({ color: 0x001a33, roughness: .6 });
+    const notebookCoverMat = new THREE.MeshStandardMaterial({ color: 0x00d4ff, roughness: .5 });
+    const lampBaseMat = new THREE.MeshStandardMaterial({ color: 0x1a2a3a, roughness: .4, metalness: .7 });
+    const lampBulbMat = new THREE.MeshStandardMaterial({
+      color: 0xaaeeff,
+      emissive: 0x00d4ff,
+      emissiveIntensity: 1.5
+    });
+
+    /* ── Floor & Walls ── */
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(24, 24), floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    const backWall = new THREE.Mesh(new THREE.PlaneGeometry(24, 14), wallMat);
+    backWall.position.set(0, 7, -5);
+    backWall.receiveShadow = true;
+    scene.add(backWall);
+
+    const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(24, 14), wallMat);
+    leftWall.position.set(-12, 7, 7);
+    leftWall.rotation.y = Math.PI / 2;
+    leftWall.receiveShadow = true;
+    scene.add(leftWall);
+
+    /* ── Desk ── */
+    const deskTop = new THREE.Mesh(new THREE.BoxGeometry(5.6, .12, 2.2), deskMat);
+    deskTop.position.set(0, 1.1, .2);
+    deskTop.castShadow = true;
+    deskTop.receiveShadow = true;
+    scene.add(deskTop);
+
+    [[2.4, -2.4], [2.4, 2.4], [-2.4, -2.4], [-2.4, 2.4]].forEach(([lx, lz]) => {
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(.12, 1.1, .12), legMat);
+      leg.position.set(lx * .44, .55, lz * .44 + .2);
+      leg.castShadow = true;
+      scene.add(leg);
+    });
+
+    /* ── Monitor ── */
+    const monitorFrame = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.4, .1), monitorFrameMat);
+    monitorFrame.position.set(0, 2.25, -.3);
+    monitorFrame.castShadow = true;
+    scene.add(monitorFrame);
+
+    const monitorScreen = new THREE.Mesh(new THREE.BoxGeometry(1.88, 1.2, .05), screenMat);
+    monitorScreen.position.set(0, 2.25, -.24);
+    monitorScreen.name = 'monitor-screen';
+    scene.add(monitorScreen);
+
+    const neck = new THREE.Mesh(new THREE.BoxGeometry(.12, .55, .12), monitorFrameMat);
+    neck.position.set(0, 1.62, -.3);
+    scene.add(neck);
+
+    const standBase = new THREE.Mesh(new THREE.BoxGeometry(.7, .06, .3), monitorFrameMat);
+    standBase.position.set(0, 1.17, -.3);
+    scene.add(standBase);
+
+    const screenText = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.85, 1.18),
+      new THREE.MeshBasicMaterial({ color: 0x001a33 })
+    );
+    screenText.position.set(0, 2.25, -.21);
+    scene.add(screenText);
+
+    /* ── Keyboard ── */
+    const keyboard = new THREE.Mesh(new THREE.BoxGeometry(1.6, .055, .55), keyMat);
+    keyboard.position.set(.1, 1.175, .7);
+    keyboard.castShadow = true;
+    keyboard.receiveShadow = true;
+    scene.add(keyboard);
+
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 13; col++) {
+        const key = new THREE.Mesh(
+          new THREE.BoxGeometry(.1, .03, .09),
+          new THREE.MeshStandardMaterial({ color: 0x0a1a2a, roughness: .5 })
+        );
+        key.position.set(-0.72 + col * .12, 1.21, 0.47 + row * .11);
+        scene.add(key);
+      }
+    }
+
+    /* ── Mouse ── */
+    const mouse = new THREE.Mesh(new THREE.BoxGeometry(.22, .06, .36), mouseMat);
+    mouse.position.set(1.2, 1.175, .62);
+    mouse.castShadow = true;
+    scene.add(mouse);
+
+    /* ── Plant ── */
+    const pot = new THREE.Mesh(new THREE.CylinderGeometry(.14, .11, .25, 16), plantPotMat);
+    pot.position.set(-1.8, 1.245, -.1);
+    pot.castShadow = true;
+    scene.add(pot);
+
+    const soil = new THREE.Mesh(
+      new THREE.CylinderGeometry(.135, .135, .03, 16),
+      new THREE.MeshStandardMaterial({ color: 0x1a0a2a })
+    );
+    soil.position.set(-1.8, 1.375, -.1);
+    scene.add(soil);
+
+    [[-0.06, .22, -.05], [.07, .28, .04], [0, .34, -.02]].forEach(([ox, oy, oz]) => {
+      const leaf = new THREE.Mesh(new THREE.SphereGeometry(.14, 10, 10), plantLeafMat);
+      leaf.position.set(-1.8 + ox, 1.375 + oy, -.1 + oz);
+      leaf.scale.set(1, 1.4, 1);
+      leaf.castShadow = true;
+      scene.add(leaf);
+    });
+
+    /* ── Notebook ── */
+    const notebook = new THREE.Mesh(new THREE.BoxGeometry(.7, .06, .9), notebookMat);
+    notebook.position.set(-1.0, 1.16, .7);
+    notebook.receiveShadow = true;
+    scene.add(notebook);
+
+    const cover = new THREE.Mesh(new THREE.BoxGeometry(.7, .012, .9), notebookCoverMat);
+    cover.position.set(-1.0, 1.19, .7);
+    scene.add(cover);
+
+    for (let i = 0; i < 6; i++) {
+      const coil = new THREE.Mesh(
+        new THREE.TorusGeometry(.025, .01, 6, 12),
+        new THREE.MeshStandardMaterial({ color: 0x00aaff, metalness: .6, roughness: .3 })
+      );
+      coil.position.set(-1.0, 1.19, .26 + i * .09);
+      coil.rotation.x = Math.PI / 2;
+      scene.add(coil);
+    }
+
+    /* ── Lamp ── */
+    const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(.08, .1, .08, 16), lampBaseMat);
+    lampBase.position.set(1.7, 1.16, -.2);
+    scene.add(lampBase);
+
+    const lampArm = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, .65, 8), lampBaseMat);
+    lampArm.position.set(1.7, 1.49, -.2);
+    scene.add(lampArm);
+
+    const lampBulb = new THREE.Mesh(new THREE.SphereGeometry(.14, 14, 14), lampBulbMat);
+    lampBulb.position.set(1.7, 1.85, -.2);
+    scene.add(lampBulb);
+
+    /* ── Astronaut figure ── */
+    const bodyMat2 = new THREE.MeshStandardMaterial({ color: 0x0055aa, roughness: .4, metalness: .2 });
+    const astroBody = new THREE.Mesh(new THREE.SphereGeometry(.1, 10, 10), bodyMat2);
+    astroBody.position.set(-.5, 1.28, .2);
+    astroBody.scale.set(1, 1.3, 1);
+    scene.add(astroBody);
+
+    const astroHead = new THREE.Mesh(new THREE.SphereGeometry(.075, 10, 10), bodyMat2);
+    astroHead.position.set(-.5, 1.43, .2);
+    scene.add(astroHead);
+
+    const visor = new THREE.Mesh(
+      new THREE.SphereGeometry(.055, 10, 10),
+      new THREE.MeshStandardMaterial({ color: 0x00d4ff, emissive: 0x00aaff, emissiveIntensity: .8, roughness: 0 })
+    );
+    visor.position.set(-.5, 1.435, .25);
+    scene.add(visor);
+
+    /* ── Vase ── */
+    const vase = new THREE.Mesh(
+      new THREE.CylinderGeometry(.07, .09, .35, 16),
+      new THREE.MeshStandardMaterial({ color: 0xe0f4ff, roughness: .3 })
+    );
+    vase.position.set(-2.2, 1.29, .35);
+    scene.add(vase);
+
+    [[-0.08, .22, .05], [.09, .28, -.04], [0, .32, .06], [-.05, .18, -.06]].forEach(([ox, oy, oz]) => {
+      const blossom = new THREE.Mesh(
+        new THREE.SphereGeometry(.055, 8, 8),
+        new THREE.MeshStandardMaterial({ color: 0xff4d8d, roughness: .6 })
+      );
+      blossom.position.set(-2.2 + ox, 1.29 + oy, .35 + oz);
+      scene.add(blossom);
+    });
+
+    /* ── Book ── */
+    const bigBook = new THREE.Mesh(
+      new THREE.BoxGeometry(.5, .06, .65),
+      new THREE.MeshStandardMaterial({ color: 0x001a33, roughness: .5 })
+    );
+    bigBook.position.set(1.85, 1.165, -.1);
+    bigBook.castShadow = true;
+    scene.add(bigBook);
+
+    const bookCover = new THREE.Mesh(
+      new THREE.BoxGeometry(.5, .014, .65),
+      new THREE.MeshStandardMaterial({ color: 0x00d4ff, roughness: .4 })
+    );
+    bookCover.position.set(1.85, 1.2, -.1);
+    scene.add(bookCover);
+
+    /* ── Click detection ── */
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+
+    canvas.addEventListener('click', (e) => {
+      pointer.x = (e.clientX / innerWidth) * 2 - 1;
+      pointer.y = (e.clientY / innerHeight) * -2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects([monitorScreen, screenText]);
+      if (hits.length > 0) openDesktop();
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      pointer.x = (e.clientX / innerWidth) * 2 - 1;
+      pointer.y = (e.clientY / innerHeight) * -2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects([monitorScreen, screenText]);
+      canvas.style.cursor = hits.length > 0 ? 'pointer' : 'default';
+    });
+
+    /* ── Animation loop ── */
+    let t = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      t += .016;
+      controls.update();
+
+      /* Pulsing cyan screen */
+      screenMat.emissiveIntensity = .6 + Math.sin(t * 1.8) * .15;
+      screenLight.intensity = 1.8 + Math.sin(t * 1.8) * .4;
+
+      /* Lamp flicker */
+      lampBulbMat.emissiveIntensity = 1.4 + Math.sin(t * 3.5) * .1;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    function resize() {
+      renderer.setSize(innerWidth, innerHeight);
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+    }
+
+  </script>
+
+
+  <!-- ══════════ DESKTOP JS ══════════ -->
+  <script>
+    window.addEventListener('load', openDesktop);
+
+    function updateClock() {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      el.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    function openDesktop() {
+      const d = document.getElementById('desktop');
+      d.style.display = 'flex';
+      document.getElementById('click-hint').style.opacity = '0';
+    }
+    window.openDesktop = openDesktop;
+
+    function closeDesktop() {
+      document.getElementById('desktop').style.display = 'none';
+      document.getElementById('click-hint').style.opacity = '1';
+    }
+    window.closeDesktop = closeDesktop;
+
+    let topZ = 21;
+
+    function openWindow(id) {
+      const win = document.getElementById(id);
+      if (!win) return;
+      const offset = (topZ - 20) * 22;
+      win.style.left = (120 + offset) + 'px';
+      win.style.top = (60 + offset) + 'px';
+      win.classList.add('open');
+      win.style.zIndex = ++topZ;
+    }
+    window.openWindow = openWindow;
+
+    function closeWindow(id) {
+      document.getElementById(id)?.classList.remove('open');
+    }
+    window.closeWindow = closeWindow;
+
+    function minimizeWindow(id) { closeWindow(id); }
+    window.minimizeWindow = minimizeWindow;
+
+    document.querySelectorAll('.win-titlebar').forEach(bar => {
+      let startX, startY, startLeft, startTop;
+      const win = bar.closest('.window');
+      bar.addEventListener('mousedown', e => {
+        if (e.target.classList.contains('traffic')) return;
+        startX = e.clientX; startY = e.clientY;
+        startLeft = parseInt(win.style.left) || 120;
+        startTop = parseInt(win.style.top) || 60;
+        win.style.zIndex = ++topZ;
+        const onMove = mv => {
+          win.style.left = (startLeft + mv.clientX - startX) + 'px';
+          win.style.top = (startTop + mv.clientY - startY) + 'px';
+        };
+        const onUp = () => {
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+        };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+      });
+    });
+  </script>
+
+  <!-- ══════════ GRID MOUSE EFFECT ══════════ -->
+  <script>
+    window.addEventListener('load', function () {
+
+      /* ══════════════════════════════════════════════════════
+         🎨  CHANGE THE EFFECT — edit only this section
+         ══════════════════════════════════════════════════════ */
+
+      var CELL   = 30;    // Square size in pixels. Smaller = more squares. Try 20–80.
+      var RADIUS = 150;   // Glow radius around the cursor in pixels. Try 100–400.
+
+      // How bright the inner fill of each highlighted square is (0 = invisible, 0.5 = very bright)
+      var FILL_ALPHA   = 0.30;
+
+      // How bright the border of each highlighted square is (0 = invisible, 1 = solid)
+      var BORDER_ALPHA = 0.95;
+
+      // Brightness of the resting (un-hovered) background grid (0 = hidden, 0.15 = clearly visible)
+      var BASE_ALPHA   = 0.05;
+
+      // Colour palette — the glow shifts between these colours from cursor centre → edge
+      // Format: [red, green, blue]  (0–255)
+      var COLORS = [
+        [0,   212, 255],  // innermost colour  → cyan
+        [0,   255, 136],  // middle colour     → neon green
+        [255,  77, 141],  // outermost colour  → hot pink
+      ];
+
+      // Speed of the slow colour animation (higher = faster shimmer). Try 0–0.05.
+      var ANIM_SPEED = 0.018;
+
+      /* ══════════════════════════════════════════════════════
+         Internal engine — no need to change anything below
+         ══════════════════════════════════════════════════════ */
+
+      var canvas  = document.getElementById('grid-canvas');
+      var ctx     = canvas.getContext('2d');
+      var desktop = document.getElementById('desktop');
+      var mouse   = { x: -9999, y: -9999 };
+      var cols, rows, time = 0;
+
+      // Linear interpolate two colour arrays [r,g,b] by t (0→1)
+      function lerp(a, b, t) {
+        t = Math.max(0, Math.min(1, t));
+        return [
+          Math.round(a[0] + (b[0] - a[0]) * t),
+          Math.round(a[1] + (b[1] - a[1]) * t),
+          Math.round(a[2] + (b[2] - a[2]) * t),
+        ];
+      }
+
+      // Pick a colour along the COLORS gradient at position t (0=first, 1=last)
+      function pickColor(t) {
+        t = Math.max(0, Math.min(0.9999, t));
+        var seg  = COLORS.length - 1;
+        var s    = t * seg;
+        var i    = Math.floor(s);
+        return lerp(COLORS[i], COLORS[i + 1], s - i);
+      }
+
+      // Match canvas size to the desktop div
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        cols = Math.ceil(canvas.width  / CELL) + 1;
+        rows = Math.ceil(canvas.height / CELL) + 1;
+      }
+
+      // Runs every frame via requestAnimationFrame
+      function draw() {
+        requestAnimationFrame(draw);
+        time += ANIM_SPEED;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var r = 0; r < rows; r++) {
+          for (var c = 0; c < cols; c++) {
+            var x    = c * CELL;       // top-left x of this square
+            var y    = r * CELL;       // top-left y of this square
+            var midX = x + CELL / 2;   // centre x
+            var midY = y + CELL / 2;   // centre y
+
+            // Distance from square centre to mouse cursor
+            var dist = Math.hypot(midX - mouse.x, midY - mouse.y);
+
+            if (dist > RADIUS) {
+              // ── Outside spotlight: draw the quiet background grid ──
+              ctx.strokeStyle = 'rgba(0,212,255,' + BASE_ALPHA + ')';
+              ctx.lineWidth = 1;
+              ctx.strokeRect(x + 0.8, y + 0.5, CELL - 1, CELL - 1);
+              continue;
+            }
+
+            // Normalised distance: 0 = directly under cursor, 1 = at spotlight edge
+            var t  = dist / RADIUS;
+
+            // Intensity falls off smoothly toward the edge (increase exponent = sharper edge)
+            var iv = Math.pow(1 - t, 2.5);
+
+            // Add a slow animated wobble to the hue so it shifts over time
+            var hue = t + Math.sin(time + c * 0.29 + r * 0.18) * 0.10;
+            var co  = pickColor(Math.max(0, Math.min(0.9999, hue)));
+
+            // ── Glowing fill inside the square ──
+            ctx.fillStyle = 'rgba(' + co[0] + ',' + co[1] + ',' + co[2] + ',' + (iv * FILL_ALPHA) + ')';
+            ctx.fillRect(x + 1, y + 1, CELL - 2, CELL - 2);
+
+            // ── Bright glowing border around the square ──
+            ctx.strokeStyle = 'rgba(' + co[0] + ',' + co[1] + ',' + co[2] + ',' + (iv * BORDER_ALPHA) + ')';
+            ctx.lineWidth = 1 + iv * 0.8;
+            ctx.strokeRect(x + 0.4, y + 0.4, CELL - 1, CELL - 1);
+
+            // ── Tiny sparkle dot at the centre of the closest squares ──
+            // Change 0.60 to raise/lower how many squares get a dot (0 = all, 0.9 = only innermost ring)
+            if (iv > 0.80) {
+              ctx.beginPath();
+              ctx.arc(midX, midY, 2 * iv, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(' + co[0] + ',' + co[1] + ',' + co[2] + ',' + iv + ')';
+              ctx.fill();
+            }
+          }
+        }
+      }
+
+      // Track cursor position relative to the page
+      desktop.addEventListener('mousemove', function (e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      // Hide spotlight when mouse leaves the desktop area
+      desktop.addEventListener('mouseleave', function () {
+        mouse.x = -9999;
+        mouse.y = -9999;
+      });
+
+      // Re-size canvas when the browser window changes size
+      window.addEventListener('resize', resize);
+
+      // ── Kick everything off ──
+      // The desktop is opened on 'load' (see openDesktop call above).
+      // We wait one frame after load so the desktop has real dimensions.
+      resize();
+      canvas.classList.add('visible');
+      draw();
+
+    }); // end window.load
+  </script>
+
+</body>
+
+</html>
